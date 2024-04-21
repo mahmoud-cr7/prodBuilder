@@ -1,12 +1,38 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import ProductCard from "./commponets/ProductCard";
 import Modal from "./commponets/ui/Modal";
 import { formInputsList, productList } from "./data";
 import Button from "./commponets/ui/Button";
 import Input from "./commponets/ui/Input";
+import { IProduct } from "./interfaces";
 
 const App = () => {
+  /*------------ State ------------ */
+  const [isOpen, setIsOpen] = useState(false);
+  const [product, setProduct] = useState<IProduct>({
+    title: "",
+    description: "",
+    imageURL: "",
+    price: "",
+    colors: [],
+    category: {
+      name: "",
+      imageURL: "",
+    },
+  });
+
+  /*------------ Handler ------------ */
+  const closeModal = () => setIsOpen(false);
+
+  const openModal = () => setIsOpen(true);
+
+  const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setProduct({ ...product, [name]: value });
+  };
+
+  /*------------ Render ------------ */
   const renderProductList = productList.map((product) => (
     <ProductCard key={product.id} {...product} product={product} />
   ));
@@ -18,18 +44,18 @@ const App = () => {
       >
         {input.label}
       </label>
-      <Input type="text" id={input.id} name={input.name} />
+      <Input
+        type="text"
+        id={input.id}
+        name={input.name}
+        value={product[input.name]}
+        onChange={onChangeHandler}
+      />
     </div>
   ));
-  const [isOpen, setIsOpen] = useState(false);
+  console.log(product);
+  
 
-  function closeModal() {
-    setIsOpen(false);
-  }
-
-  function openModal() {
-    setIsOpen(true);
-  }
   return (
     <main className="container m-auto">
       <Button className="bg-indigo-700 hover:bg-indigo-800" onClick={openModal}>
