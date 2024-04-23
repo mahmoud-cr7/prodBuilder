@@ -1,5 +1,6 @@
 import { IProduct } from "../interfaces";
 import { txtSlicer } from "../utils/functions";
+import CircleColor from "./CircleColor";
 import Image from "./Image";
 import Button from "./ui/Button";
 
@@ -8,7 +9,15 @@ interface Iprops {
 }
 
 const ProductCard = ({ product }: Iprops) => {
-  const { title, description, imageURL, price, category } = product;
+  const { title, description, imageURL, price, category, colors } = product;
+
+    const renderColor = colors.map((color) => (
+      <CircleColor
+        key={color}
+        color={color}
+
+      />
+    ));
   return (
     <div className="border p-2 rounded-md  flex flex-col max-w-sm md:max-w-lg mx-auto md:mx-0">
       <Image
@@ -20,11 +29,9 @@ const ProductCard = ({ product }: Iprops) => {
       <p className="text-sm text-gray-500 break-words">
         {txtSlicer(description)}
       </p>
-      <div className="flex items-center my-4 space-x-2">
-        <span className="w-5 h-5 rounded-full bg-indigo-600"></span>
-        <span className="w-5 h-5 rounded-full bg-yellow-600"></span>
-        <span className="w-5 h-5 rounded-full bg-red-600"></span>
-      </div>
+      <div className="flex items-center my-4 space-x-2">{renderColor}</div>
+
+
       <div className="flex items-center justify-between">
         <span className="text-lg text-indigo-600 font-semibold">${price}</span>
         <Image
